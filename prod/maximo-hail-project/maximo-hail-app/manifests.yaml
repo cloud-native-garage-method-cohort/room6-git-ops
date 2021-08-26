@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: 0571cad65c87183c1cac73fa41f9b1e0a9b7e81d
+    app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
+  labels:
+    app: maximo-hail-project
+    app.kubernetes.io/instance: maximo-hail-project
+    app.kubernetes.io/name: maximo-hail-project-maximo-hail-app
+    app.openshift.io/runtime: python
+  name: maximo-hail-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8501
+  selector:
+    app: maximo-hail-project
+    app.kubernetes.io/instance: maximo-hail-project
+    app.kubernetes.io/name: maximo-hail-project-maximo-hail-app
+    app.openshift.io/runtime: python
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: 0571cad65c87183c1cac73fa41f9b1e0a9b7e81d
+    app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
+  labels:
+    app: maximo-hail-project
+    app.kubernetes.io/instance: maximo-hail-project
+    app.kubernetes.io/name: maximo-hail-project-maximo-hail-app
+    app.openshift.io/runtime: python
+  name: maximo-hail-app
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: maximo-hail-project
+      app.kubernetes.io/instance: maximo-hail-project
+      app.kubernetes.io/name: maximo-hail-project-maximo-hail-app
+      app.openshift.io/runtime: python
+  template:
+    metadata:
+      annotations:
+        app.openshift.io/vcs-ref: 0571cad65c87183c1cac73fa41f9b1e0a9b7e81d
+        app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
+      creationTimestamp: null
+      labels:
+        app: maximo-hail-project
+        app.kubernetes.io/instance: maximo-hail-project
+        app.kubernetes.io/name: maximo-hail-project-maximo-hail-app
+        app.openshift.io/runtime: python
+    spec:
+      containers:
+      - env:
+        - name: INGRESS_HOST
+        - name: PROTOCOLS
+        - name: LOG_LEVEL
+          value: debug
+        image: quay.io/sherryyu/maximo-hail:0571cad65c87183c1cac73fa41f9b1e0a9b7e81d
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8501
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: maximo-hail-app
+        ports:
+        - containerPort: 8501
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: 0571cad65c87183c1cac73fa41f9b1e0a9b7e81d
+    app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
+    argocd.argoproj.io/sync-options: Validate=false
+    openshift.io/host.generated: "true"
+  labels:
+    app: maximo-hail-project
+    app.kubernetes.io/instance: maximo-hail-project
+    app.kubernetes.io/name: maximo-hail-project-maximo-hail-app
+    app.openshift.io/runtime: python
+  name: maximo-hail-app
+spec:
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: maximo-hail-app
+    weight: 100
+  wildcardPolicy: None
