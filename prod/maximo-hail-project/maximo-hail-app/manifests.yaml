@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    app.openshift.io/vcs-ref: 46d6282949cf2c75fac285bf9745990c10aaebb0
+    app.openshift.io/vcs-ref: 7f06779cc05631786b46eab8957c0e5d7523ca88
     app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
   labels:
     app: maximo-hail-project
@@ -28,7 +28,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    app.openshift.io/vcs-ref: 46d6282949cf2c75fac285bf9745990c10aaebb0
+    app.openshift.io/vcs-ref: 7f06779cc05631786b46eab8957c0e5d7523ca88
     app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
   labels:
     app: maximo-hail-project
@@ -49,7 +49,7 @@ spec:
   template:
     metadata:
       annotations:
-        app.openshift.io/vcs-ref: 46d6282949cf2c75fac285bf9745990c10aaebb0
+        app.openshift.io/vcs-ref: 7f06779cc05631786b46eab8957c0e5d7523ca88
         app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
       creationTimestamp: null
       labels:
@@ -64,7 +64,7 @@ spec:
         - name: PROTOCOLS
         - name: LOG_LEVEL
           value: debug
-        image: quay.io/sherryyu/maximo-hail:46d6282949cf2c75fac285bf9745990c10aaebb0
+        image: quay.io/sherryyu/maximo-hail:7f06779cc05631786b46eab8957c0e5d7523ca88
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
@@ -102,7 +102,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   annotations:
-    app.openshift.io/vcs-ref: 46d6282949cf2c75fac285bf9745990c10aaebb0
+    app.openshift.io/vcs-ref: 7f06779cc05631786b46eab8957c0e5d7523ca88
     app.openshift.io/vcs-uri: https://github.com/sherryyyu/maximo-hail
     argocd.argoproj.io/sync-options: Validate=false
     openshift.io/host.generated: "true"
